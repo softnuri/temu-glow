@@ -3,107 +3,129 @@ import Navbar from '../components/Navbar';
 import CategoryNav from '../components/CategoryNav';
 import ProductCard from '../components/ProductCard';
 
-// 카테고리별 상품 데이터
 const categoryProducts = {
   electronics: [
     {
       id: 1,
-      title: "Wireless Earbuds",
+      title: "Wireless Earbuds with Active Noise Cancellation",
       price: 29.99,
+      originalPrice: 59.99,
       image: "https://picsum.photos/400/400",
       rating: 4,
+      sales: 1234,
     },
     {
       id: 2,
-      title: "Smart Watch",
+      title: "Smart Watch with Heart Rate Monitor",
       price: 59.99,
+      originalPrice: 99.99,
       image: "https://picsum.photos/400/401",
       rating: 5,
+      sales: 856,
     },
   ],
   fashion: [
     {
       id: 3,
-      title: "Casual T-Shirt",
+      title: "Premium Cotton T-Shirt",
       price: 19.99,
+      originalPrice: 29.99,
       image: "https://picsum.photos/400/402",
       rating: 4,
+      sales: 2345,
     },
     {
       id: 4,
-      title: "Denim Jeans",
+      title: "Slim Fit Denim Jeans",
       price: 49.99,
+      originalPrice: 79.99,
       image: "https://picsum.photos/400/403",
       rating: 5,
+      sales: 1567,
     },
   ],
   home: [
     {
       id: 5,
-      title: "Coffee Maker",
+      title: "Automatic Coffee Maker with Timer",
       price: 79.99,
+      originalPrice: 129.99,
       image: "https://picsum.photos/400/404",
       rating: 4,
+      sales: 678,
     },
     {
       id: 6,
-      title: "Bed Sheets Set",
+      title: "Luxury Egyptian Cotton Bed Sheets Set",
       price: 39.99,
+      originalPrice: 69.99,
       image: "https://picsum.photos/400/405",
       rating: 5,
+      sales: 2890,
     },
   ],
   beauty: [
     {
       id: 7,
-      title: "Face Cream",
+      title: "Anti-Aging Face Cream with Retinol",
       price: 24.99,
+      originalPrice: 44.99,
       image: "https://picsum.photos/400/406",
       rating: 4,
+      sales: 3456,
     },
     {
       id: 8,
-      title: "Lipstick Set",
+      title: "Professional Makeup Brush Set",
       price: 19.99,
+      originalPrice: 39.99,
       image: "https://picsum.photos/400/407",
       rating: 5,
+      sales: 1234,
     },
   ],
   sports: [
     {
       id: 9,
-      title: "Yoga Mat",
+      title: "Premium Non-Slip Yoga Mat",
       price: 29.99,
+      originalPrice: 49.99,
       image: "https://picsum.photos/400/408",
       rating: 4,
+      sales: 567,
     },
     {
       id: 10,
-      title: "Dumbbells Set",
+      title: "Adjustable Dumbbell Set 5-25kg",
       price: 89.99,
+      originalPrice: 149.99,
       image: "https://picsum.photos/400/409",
       rating: 5,
+      sales: 890,
     },
   ],
   toys: [
     {
       id: 11,
-      title: "Building Blocks",
+      title: "Educational Building Blocks Set",
       price: 34.99,
+      originalPrice: 59.99,
       image: "https://picsum.photos/400/410",
       rating: 4,
+      sales: 1234,
     },
     {
       id: 12,
-      title: "Remote Control Car",
+      title: "Remote Control Racing Car",
       price: 44.99,
+      originalPrice: 79.99,
       image: "https://picsum.photos/400/411",
       rating: 5,
+      sales: 678,
     },
   ],
 };
 
-// 카테고리별 스타일 설정
 const categoryStyles = {
   electronics: {
     bgColor: 'bg-blue-50',
@@ -151,20 +173,20 @@ const getCategoryTitle = (categoryId: string) => {
 
 const Index = () => {
   const { id: categoryId } = useParams();
-  const products = categoryId ? categoryProducts[categoryId as keyof typeof categoryProducts] : categoryProducts.electronics;
+  const products = categoryId ? categoryProducts[categoryId as keyof typeof categoryProducts] : [];
   const style = categoryId ? categoryStyles[categoryId as keyof typeof categoryStyles] : categoryStyles.electronics;
 
   return (
     <div className={`min-h-screen ${style.bgColor}`}>
       <Navbar />
       <CategoryNav />
-      <main className="container mx-auto px-4 py-8">
-        <div className={`${style.headerBg} rounded-lg p-6 mb-6`}>
-          <h1 className={`text-2xl font-bold ${style.textColor}`}>
+      <main className="container mx-auto px-4 py-6">
+        <div className={`${style.headerBg} rounded-lg p-4 mb-6`}>
+          <h1 className={`text-xl font-bold ${style.textColor}`}>
             {getCategoryTitle(categoryId || '')}
           </h1>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
           {products.map((product) => (
             <ProductCard key={product.id} {...product} />
           ))}
