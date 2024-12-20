@@ -1,6 +1,7 @@
 import { Button } from './ui/button';
 import { Card, CardContent, CardFooter } from './ui/card';
 import { Star } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface ProductCardProps {
   id: number;
@@ -21,10 +22,11 @@ const ProductCard = ({
   rating, 
   sales 
 }: ProductCardProps) => {
+  const navigate = useNavigate();
   const discount = originalPrice ? Math.round((1 - price / originalPrice) * 100) : 0;
 
   return (
-    <Card className="h-full flex flex-col hover:shadow-lg transition-shadow border-none">
+    <Card className="h-full flex flex-col hover:shadow-lg transition-shadow border-none cursor-pointer" onClick={() => navigate(`/product/${id}`)}>
       <CardContent className="p-3">
         <div className="aspect-square overflow-hidden rounded-lg mb-3 relative">
           <img
@@ -66,7 +68,10 @@ const ProductCard = ({
       <CardFooter className="mt-auto p-3 pt-0">
         <Button 
           className="w-full bg-primary hover:bg-primary/90" 
-          onClick={() => console.log(`Add product ${id} to cart`)}
+          onClick={(e) => {
+            e.stopPropagation();
+            console.log(`Add product ${id} to cart`);
+          }}
         >
           Add to Cart
         </Button>
