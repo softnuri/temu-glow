@@ -1,6 +1,25 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Star, ArrowLeft, Heart, Share2 } from 'lucide-react';
+import { 
+  Button, 
+  Container, 
+  Typography, 
+  Rating, 
+  IconButton,
+  Paper,
+  Grid,
+  Box,
+  List,
+  ListItem,
+  ListItemText,
+  Divider
+} from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faArrowLeft, 
+  faHeart, 
+  faShare,
+  faStar
+} from '@fortawesome/free-solid-svg-icons';
 import Navbar from '../components/Navbar';
 import { toast } from 'sonner';
 
@@ -45,104 +64,120 @@ const ProductDetail = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <Box sx={{ minHeight: '100vh', bgcolor: 'grey.50' }}>
       <Navbar />
-      <div className="container max-w-4xl mx-auto px-4 py-6">
-        <button
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Button
+          startIcon={<FontAwesomeIcon icon={faArrowLeft} />}
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-gray-600 mb-6 hover:text-gray-900"
+          sx={{ mb: 3 }}
+          color="inherit"
         >
-          <ArrowLeft className="w-4 h-4" />
           뒤로가기
-        </button>
+        </Button>
 
-        <div className="bg-white rounded-xl shadow-sm">
-          <div className="grid md:grid-cols-2 gap-6 p-6">
-            <div className="space-y-4">
-              <div className="aspect-square rounded-lg overflow-hidden">
+        <Paper elevation={1} sx={{ p: 3, borderRadius: 2 }}>
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={6}>
+              <Box sx={{ 
+                aspectRatio: '1/1',
+                borderRadius: 2,
+                overflow: 'hidden'
+              }}>
                 <img
                   src={product.image}
                   alt={product.title}
-                  className="w-full h-full object-cover"
+                  style={{ 
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover'
+                  }}
                 />
-              </div>
-            </div>
+              </Box>
+            </Grid>
 
-            <div className="space-y-4">
-              <h1 className="text-2xl font-bold">{product.title}</h1>
-              
-              <div className="flex items-center gap-2">
-                <div className="flex">
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <Star
-                      key={index}
-                      className={`h-5 w-5 ${
-                        index < product.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
-                      }`}
-                    />
-                  ))}
-                </div>
-                <span className="text-gray-600">{product.sales}+ 구매</span>
-              </div>
+            <Grid item xs={12} md={6}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <Typography variant="h4" component="h1" gutterBottom>
+                  {product.title}
+                </Typography>
+                
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Rating value={product.rating} readOnly />
+                  <Typography variant="body2" color="text.secondary">
+                    {product.sales}+ 구매
+                  </Typography>
+                </Box>
 
-              <div className="flex items-center gap-3">
-                <span className="text-3xl font-bold">${product.price}</span>
-                <span className="text-xl text-gray-500 line-through">
-                  ${product.originalPrice}
-                </span>
-                <span className="text-red-500 font-bold">-{discount}%</span>
-              </div>
+                <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 2 }}>
+                  <Typography variant="h4" component="span">
+                    ${product.price}
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    component="span"
+                    color="text.secondary"
+                    sx={{ textDecoration: 'line-through' }}
+                  >
+                    ${product.originalPrice}
+                  </Typography>
+                  <Typography variant="h6" component="span" color="error.main">
+                    -{discount}%
+                  </Typography>
+                </Box>
 
-              <p className="text-gray-600">{product.description}</p>
+                <Typography variant="body1" color="text.secondary" paragraph>
+                  {product.description}
+                </Typography>
 
-              <div className="space-y-2">
-                <h3 className="font-bold">주요 특징:</h3>
-                <ul className="list-disc pl-5 space-y-1">
-                  {product.features.map((feature, index) => (
-                    <li key={index} className="text-gray-600">{feature}</li>
-                  ))}
-                </ul>
-              </div>
+                <Box sx={{ my: 2 }}>
+                  <Typography variant="h6" gutterBottom>주요 특징:</Typography>
+                  <List>
+                    {product.features.map((feature, index) => (
+                      <ListItem key={index} sx={{ py: 0.5 }}>
+                        <ListItemText primary={feature} />
+                      </ListItem>
+                    ))}
+                  </List>
+                </Box>
 
-              <div className="space-y-2">
-                <h3 className="font-bold">제품 상세:</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {Object.entries(product.specifications).map(([key, value]) => (
-                    <div key={key} className="flex justify-between">
-                      <span className="text-gray-600">{key}:</span>
-                      <span>{value}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+                <Divider />
 
-              <div className="flex gap-3 pt-4">
-                <Button
-                  onClick={handleAddToCart}
-                  className="flex-1 bg-primary hover:bg-primary/90"
-                >
-                  장바구니 담기
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => toast.success("위시리스트에 추가되었습니다!")}
-                >
-                  <Heart className="h-5 w-5" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={handleShare}
-                >
-                  <Share2 className="h-5 w-5" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+                <Box sx={{ my: 2 }}>
+                  <Typography variant="h6" gutterBottom>제품 상세:</Typography>
+                  <Grid container spacing={1}>
+                    {Object.entries(product.specifications).map(([key, value]) => (
+                      <Grid item xs={6} key={key}>
+                        <Typography variant="body2" color="text.secondary">
+                          {key}: {value}
+                        </Typography>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Box>
+
+                <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={handleAddToCart}
+                    fullWidth
+                  >
+                    장바구니 담기
+                  </Button>
+                  <IconButton onClick={() => toast.success("위시리스트에 추가되었습니다!")}>
+                    <FontAwesomeIcon icon={faHeart} />
+                  </IconButton>
+                  <IconButton onClick={handleShare}>
+                    <FontAwesomeIcon icon={faShare} />
+                  </IconButton>
+                </Box>
+              </Box>
+            </Grid>
+          </Grid>
+        </Paper>
+      </Container>
+    </Box>
   );
 };
 

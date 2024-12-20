@@ -1,107 +1,181 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Input } from './ui/input';
-import { Button } from './ui/button';
-import { ShoppingCart, Search, Menu, User, Heart } from 'lucide-react';
+import { 
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  InputBase,
+  Box,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  Container,
+  alpha,
+  styled
+} from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faShoppingCart,
+  faSearch,
+  faBars,
+  faUser,
+  faHeart
+} from '@fortawesome/free-solid-svg-icons';
+
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius * 3,
+  backgroundColor: alpha(theme.palette.common.black, 0.05),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.black, 0.08),
+  },
+  marginRight: theme.spacing(2),
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(3),
+    width: 'auto',
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: theme.palette.text.secondary,
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  width: '100%',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+  },
+}));
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const categories = [
+    { id: 'electronics', name: 'Electronics' },
+    { id: 'fashion', name: 'Fashion' },
+    { id: 'home', name: 'Home & Garden' },
+    { id: 'beauty', name: 'Beauty' },
+    { id: 'sports', name: 'Sports' },
+    { id: 'toys', name: 'Toys' },
+  ];
+
   return (
-    <nav className="sticky top-0 z-50 bg-white">
-      <div className="border-b">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-14">
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="md:hidden"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-              >
-                <Menu className="h-5 w-5" />
-              </Button>
-              <Link to="/" className="text-xl font-bold text-primary">
-                Temu
-              </Link>
-            </div>
+    <AppBar position="sticky" color="default" elevation={1}>
+      <Container maxWidth="xl">
+        <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 1, sm: 2 } }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <IconButton
+              size="large"
+              edge="start"
+              sx={{ display: { md: 'none' } }}
+              onClick={() => setIsMenuOpen(true)}
+            >
+              <FontAwesomeIcon icon={faBars} />
+            </IconButton>
+            <Typography
+              variant="h6"
+              component={Link}
+              to="/"
+              sx={{ 
+                textDecoration: 'none', 
+                color: 'primary.main',
+                fontWeight: 'bold'
+              }}
+            >
+              Temu
+            </Typography>
+          </Box>
 
-            <div className="hidden md:flex flex-1 max-w-xl mx-8">
-              <div className="relative w-full">
-                <Input
-                  type="search"
-                  placeholder="What are you looking for?"
-                  className="w-full pr-10 rounded-full bg-gray-100"
-                />
-                <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Link to="/wishlist">
-                <Button variant="ghost" size="icon" className="hidden md:inline-flex">
-                  <Heart className="h-5 w-5" />
-                </Button>
-              </Link>
-              <Link to="/account">
-                <Button variant="ghost" size="icon">
-                  <User className="h-5 w-5" />
-                </Button>
-              </Link>
-              <Link to="/cart">
-                <Button variant="ghost" size="icon">
-                  <ShoppingCart className="h-5 w-5" />
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile search bar */}
-      <div className="border-b md:hidden">
-        <div className="container mx-auto px-4 py-2">
-          <div className="relative">
-            <Input
-              type="search"
+          <Search sx={{ 
+            display: { xs: 'none', md: 'flex' },
+            flex: 1,
+            maxWidth: 'xl',
+            mx: 8
+          }}>
+            <SearchIconWrapper>
+              <FontAwesomeIcon icon={faSearch} />
+            </SearchIconWrapper>
+            <StyledInputBase
               placeholder="What are you looking for?"
-              className="w-full pr-10 rounded-full bg-gray-100"
+              inputProps={{ 'aria-label': 'search' }}
             />
-            <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
-          </div>
-        </div>
-      </div>
+          </Search>
 
-      {/* Mobile menu */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-white border-b">
-          <div className="container mx-auto px-4 py-2">
-            <div className="space-y-2">
-              {categories.map((category) => (
-                <Link
-                  key={category.id}
-                  to={`/category/${category.id}`}
-                  className="block py-2 hover:text-primary"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {category.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-    </nav>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <IconButton
+              component={Link}
+              to="/wishlist"
+              sx={{ display: { xs: 'none', md: 'flex' } }}
+            >
+              <FontAwesomeIcon icon={faHeart} />
+            </IconButton>
+            <IconButton component={Link} to="/account">
+              <FontAwesomeIcon icon={faUser} />
+            </IconButton>
+            <IconButton component={Link} to="/cart">
+              <FontAwesomeIcon icon={faShoppingCart} />
+            </IconButton>
+          </Box>
+        </Toolbar>
+
+        {/* Mobile search bar */}
+        <Box sx={{ 
+          display: { xs: 'block', md: 'none' },
+          p: 2,
+          borderTop: 1,
+          borderColor: 'divider'
+        }}>
+          <Search>
+            <SearchIconWrapper>
+              <FontAwesomeIcon icon={faSearch} />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="What are you looking for?"
+              inputProps={{ 'aria-label': 'search' }}
+            />
+          </Search>
+        </Box>
+      </Container>
+
+      {/* Mobile menu drawer */}
+      <Drawer
+        anchor="left"
+        open={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+      >
+        <Box sx={{ width: 250 }}>
+          <List>
+            {categories.map((category) => (
+              <ListItem
+                key={category.id}
+                component={Link}
+                to={`/category/${category.id}`}
+                onClick={() => setIsMenuOpen(false)}
+                button
+              >
+                <ListItemText primary={category.name} />
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
+    </AppBar>
   );
 };
-
-const categories = [
-  { id: 'electronics', name: 'Electronics' },
-  { id: 'fashion', name: 'Fashion' },
-  { id: 'home', name: 'Home & Garden' },
-  { id: 'beauty', name: 'Beauty' },
-  { id: 'sports', name: 'Sports' },
-  { id: 'toys', name: 'Toys' },
-];
 
 export default Navbar;
