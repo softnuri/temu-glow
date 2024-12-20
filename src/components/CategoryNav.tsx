@@ -11,18 +11,18 @@ import {
   faPlug,
   faTshirt,
   faHome,
-  faSparkles,
+  faStar,
   faFutbol,
-  faTeddyBear
+  faBabyCarriage
 } from '@fortawesome/free-solid-svg-icons';
 
 const categories = [
   { id: 'electronics', name: 'Electronics', icon: faPlug },
   { id: 'fashion', name: 'Fashion', icon: faTshirt },
   { id: 'home', name: 'Home & Garden', icon: faHome },
-  { id: 'beauty', name: 'Beauty', icon: faSparkles },
+  { id: 'beauty', name: 'Beauty', icon: faStar },
   { id: 'sports', name: 'Sports', icon: faFutbol },
-  { id: 'toys', name: 'Toys', icon: faTeddyBear },
+  { id: 'toys', name: 'Toys', icon: faBabyCarriage },
 ];
 
 const CategoryLink = styled(Link)(({ theme }) => ({

@@ -166,7 +166,6 @@ const Navbar = () => {
                 component={Link}
                 to={`/category/${category.id}`}
                 onClick={() => setIsMenuOpen(false)}
-                button
               >
                 <ListItemText primary={category.name} />
               </ListItem>
