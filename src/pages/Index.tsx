@@ -1,162 +1,153 @@
 import { useParams } from 'react-router-dom';
+import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import CategoryNav from '../components/CategoryNav';
 import ProductCard from '../components/ProductCard';
 
-const categoryProducts = {
+const allProducts = {
   electronics: [
     {
       id: 1,
-      title: "Wireless Earbuds with Active Noise Cancellation",
-      price: 29.99,
-      originalPrice: 59.99,
-      image: "https://picsum.photos/400/400",
-      rating: 4,
+      title: "Wireless Noise Cancelling Earbuds Pro",
+      price: 129.99,
+      originalPrice: 199.99,
+      image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df",
+      rating: 4.5,
       sales: 1234,
     },
     {
       id: 2,
-      title: "Smart Watch with Heart Rate Monitor",
-      price: 59.99,
-      originalPrice: 99.99,
-      image: "https://picsum.photos/400/401",
-      rating: 5,
+      title: "Smart Watch Series X - Health & Fitness Tracker",
+      price: 199.99,
+      originalPrice: 299.99,
+      image: "https://images.unsplash.com/photo-1546868871-7041f2a55e12",
+      rating: 4.8,
       sales: 856,
     },
+    {
+      id: 3,
+      title: "4K Ultra HD Smart TV - 55 inch",
+      price: 499.99,
+      originalPrice: 799.99,
+      image: "https://images.unsplash.com/photo-1593784991095-a205069470b6",
+      rating: 4.7,
+      sales: 432,
+    }
   ],
   fashion: [
     {
-      id: 3,
-      title: "Premium Cotton T-Shirt",
-      price: 19.99,
-      originalPrice: 29.99,
-      image: "https://picsum.photos/400/402",
-      rating: 4,
+      id: 4,
+      title: "Premium Cotton Casual T-Shirt",
+      price: 24.99,
+      originalPrice: 39.99,
+      image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
+      rating: 4.3,
       sales: 2345,
     },
     {
-      id: 4,
-      title: "Slim Fit Denim Jeans",
-      price: 49.99,
-      originalPrice: 79.99,
-      image: "https://picsum.photos/400/403",
-      rating: 5,
-      sales: 1567,
-    },
-  ],
-  home: [
-    {
       id: 5,
-      title: "Automatic Coffee Maker with Timer",
-      price: 79.99,
+      title: "Designer Denim Jacket - Vintage Style",
+      price: 89.99,
       originalPrice: 129.99,
-      image: "https://picsum.photos/400/404",
-      rating: 4,
-      sales: 678,
+      image: "https://images.unsplash.com/photo-1551537482-f2075a1d41f2",
+      rating: 4.6,
+      sales: 890,
     },
     {
       id: 6,
-      title: "Luxury Egyptian Cotton Bed Sheets Set",
-      price: 39.99,
-      originalPrice: 69.99,
-      image: "https://picsum.photos/400/405",
-      rating: 5,
-      sales: 2890,
-    },
+      title: "Leather Crossbody Bag",
+      price: 59.99,
+      originalPrice: 99.99,
+      image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa",
+      rating: 4.4,
+      sales: 678,
+    }
   ],
-  beauty: [
+  home: [
     {
       id: 7,
-      title: "Anti-Aging Face Cream with Retinol",
-      price: 24.99,
-      originalPrice: 44.99,
-      image: "https://picsum.photos/400/406",
-      rating: 4,
-      sales: 3456,
+      title: "Smart Home Security Camera System",
+      price: 149.99,
+      originalPrice: 249.99,
+      image: "https://images.unsplash.com/photo-1558002038-bb4237b50b11",
+      rating: 4.7,
+      sales: 345,
     },
     {
       id: 8,
-      title: "Professional Makeup Brush Set",
-      price: 19.99,
-      originalPrice: 39.99,
-      image: "https://picsum.photos/400/407",
-      rating: 5,
-      sales: 1234,
-    },
-  ],
-  sports: [
-    {
-      id: 9,
-      title: "Premium Non-Slip Yoga Mat",
-      price: 29.99,
-      originalPrice: 49.99,
-      image: "https://picsum.photos/400/408",
-      rating: 4,
+      title: "Robot Vacuum Cleaner with Mapping",
+      price: 299.99,
+      originalPrice: 499.99,
+      image: "https://images.unsplash.com/photo-1562254492-377a3ac576f4",
+      rating: 4.6,
       sales: 567,
     },
     {
-      id: 10,
-      title: "Adjustable Dumbbell Set 5-25kg",
-      price: 89.99,
-      originalPrice: 149.99,
-      image: "https://picsum.photos/400/409",
-      rating: 5,
-      sales: 890,
-    },
+      id: 9,
+      title: "Air Purifier with HEPA Filter",
+      price: 179.99,
+      originalPrice: 249.99,
+      image: "https://images.unsplash.com/photo-1585771724684-38269d6639fd",
+      rating: 4.5,
+      sales: 234,
+    }
   ],
-  toys: [
+  beauty: [
+    {
+      id: 10,
+      title: "Professional Hair Dryer Set",
+      price: 79.99,
+      originalPrice: 129.99,
+      image: "https://images.unsplash.com/photo-1522338242992-e1a54906a8da",
+      rating: 4.4,
+      sales: 789,
+    },
     {
       id: 11,
-      title: "Educational Building Blocks Set",
-      price: 34.99,
-      originalPrice: 59.99,
-      image: "https://picsum.photos/400/410",
-      rating: 4,
-      sales: 1234,
-    },
-    {
-      id: 12,
-      title: "Remote Control Racing Car",
-      price: 44.99,
-      originalPrice: 79.99,
-      image: "https://picsum.photos/400/411",
-      rating: 5,
-      sales: 678,
-    },
-  ],
+      title: "Luxury Skincare Gift Set",
+      price: 99.99,
+      originalPrice: 159.99,
+      image: "https://images.unsplash.com/photo-1570194065650-d99fb4b8f5b1",
+      rating: 4.8,
+      sales: 456,
+    }
+  ]
 };
 
-const categoryStyles = {
-  electronics: {
-    bgColor: 'bg-blue-50',
-    textColor: 'text-blue-900',
-    headerBg: 'bg-blue-100',
-  },
-  fashion: {
-    bgColor: 'bg-pink-50',
-    textColor: 'text-pink-900',
-    headerBg: 'bg-pink-100',
-  },
-  home: {
-    bgColor: 'bg-green-50',
-    textColor: 'text-green-900',
-    headerBg: 'bg-green-100',
-  },
-  beauty: {
-    bgColor: 'bg-purple-50',
-    textColor: 'text-purple-900',
-    headerBg: 'bg-purple-100',
-  },
-  sports: {
-    bgColor: 'bg-orange-50',
-    textColor: 'text-orange-900',
-    headerBg: 'bg-orange-100',
-  },
-  toys: {
-    bgColor: 'bg-yellow-50',
-    textColor: 'text-yellow-900',
-    headerBg: 'bg-yellow-100',
-  },
+const Index = () => {
+  const { id: categoryId } = useParams();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Flatten all products into a single array
+  const allProductsList = Object.values(allProducts).flat();
+
+  // Filter products based on category and search query
+  const filteredProducts = categoryId
+    ? allProducts[categoryId as keyof typeof allProducts]?.filter(product =>
+        product.title.toLowerCase().includes(searchQuery.toLowerCase())
+      ) || []
+    : allProductsList.filter(product =>
+        product.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Navbar onSearch={setSearchQuery} />
+      <CategoryNav />
+      <main className="container mx-auto px-4 py-6">
+        <div className={`bg-white rounded-lg p-4 mb-6 shadow-sm`}>
+          <h1 className="text-xl font-bold text-gray-800">
+            {categoryId ? getCategoryTitle(categoryId) : 'Featured Products'}
+          </h1>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          {filteredProducts.map((product) => (
+            <ProductCard key={product.id} {...product} />
+          ))}
+        </div>
+      </main>
+    </div>
+  );
 };
 
 const getCategoryTitle = (categoryId: string) => {
@@ -169,31 +160,6 @@ const getCategoryTitle = (categoryId: string) => {
     toys: 'Toys',
   };
   return titles[categoryId] || 'Featured Products';
-};
-
-const Index = () => {
-  const { id: categoryId } = useParams();
-  const products = categoryId ? categoryProducts[categoryId as keyof typeof categoryProducts] : [];
-  const style = categoryId ? categoryStyles[categoryId as keyof typeof categoryStyles] : categoryStyles.electronics;
-
-  return (
-    <div className={`min-h-screen ${style.bgColor}`}>
-      <Navbar />
-      <CategoryNav />
-      <main className="container mx-auto px-4 py-6">
-        <div className={`${style.headerBg} rounded-lg p-4 mb-6`}>
-          <h1 className={`text-xl font-bold ${style.textColor}`}>
-            {getCategoryTitle(categoryId || '')}
-          </h1>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-          {products.map((product) => (
-            <ProductCard key={product.id} {...product} />
-          ))}
-        </div>
-      </main>
-    </div>
-  );
 };
 
 export default Index;

@@ -62,9 +62,20 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const Navbar = () => {
+interface NavbarProps {
+  onSearch?: (query: string) => void;
+}
+
+const Navbar = ({ onSearch }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
   const navigate = useNavigate();
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearchValue(value);
+    onSearch?.(value);
+  };
 
   const categories = [
     { id: 'electronics', name: 'Electronics' },
@@ -114,6 +125,8 @@ const Navbar = () => {
             <StyledInputBase
               placeholder="What are you looking for?"
               inputProps={{ 'aria-label': 'search' }}
+              value={searchValue}
+              onChange={handleSearchChange}
             />
           </Search>
 
@@ -147,6 +160,8 @@ const Navbar = () => {
             <StyledInputBase
               placeholder="What are you looking for?"
               inputProps={{ 'aria-label': 'search' }}
+              value={searchValue}
+              onChange={handleSearchChange}
             />
           </Search>
         </Box>
