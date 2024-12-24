@@ -102,15 +102,6 @@ const allProducts = {
       rating: 4.4,
       sales: 789,
     },
-    {
-      id: 11,
-      title: "Luxury Skincare Gift Set",
-      price: 99.99,
-      originalPrice: 159.99,
-      image: "https://images.unsplash.com/photo-1570194065650-d99fb4b8f5b1",
-      rating: 4.8,
-      sales: 456,
-    }
   ]
 };
 
