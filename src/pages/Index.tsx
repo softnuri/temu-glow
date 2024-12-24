@@ -65,15 +65,6 @@ const allProducts = {
   ],
   home: [
     {
-      id: 7,
-      title: "Smart Home Security Camera System",
-      price: 149.99,
-      originalPrice: 249.99,
-      image: "https://images.unsplash.com/photo-1558002038-bb4237b50b11",
-      rating: 4.7,
-      sales: 345,
-    },
-    {
       id: 8,
       title: "Robot Vacuum Cleaner with Mapping",
       price: 299.99,
