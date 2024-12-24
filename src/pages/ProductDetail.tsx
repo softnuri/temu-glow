@@ -22,37 +22,37 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Navbar from '../components/Navbar';
 import { toast } from 'sonner';
+import { allProducts } from './Index';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // 실제 프로젝트에서는 API를 통해 상품 데이터를 가져와야 합니다
-  const product = {
-    id: Number(id),
-    title: "Anti-Aging Face Cream with Retinol",
-    price: 24.99,
-    originalPrice: 44.99,
-    image: "https://picsum.photos/400/406",
-    rating: 4,
-    sales: 3456,
-    description: "고품질 레티놀이 함유된 안티에이징 페이스 크림으로, 주름 개선과 피부 탄력 증진에 도움을 줍니다. 수분 공급과 피부 재생 효과가 뛰어나며, 민감한 피부에도 적합합니다.",
-    features: [
-      "레티놀 함유로 주름 개선 효과",
-      "24시간 지속되는 보습력",
-      "민감성 피부 테스트 완료",
-      "무향료, 무파라벤",
-      "한국 화장품 인증"
-    ],
-    specifications: {
-      용량: "50ml",
-      사용기한: "제조일로부터 12개월",
-      제조국: "대한민국",
-      피부타입: "모든 피부타입"
-    }
-  };
+  // Find the product from all categories
+  const product = Object.values(allProducts)
+    .flat()
+    .find(p => p.id === Number(id));
 
-  const discount = Math.round((1 - product.price / product.originalPrice) * 100);
+  if (!product) {
+    return (
+      <Box sx={{ minHeight: '100vh', bgcolor: 'grey.50' }}>
+        <Navbar />
+        <Container maxWidth="lg" sx={{ py: 4 }}>
+          <Typography variant="h4">Product not found</Typography>
+          <Button
+            startIcon={<FontAwesomeIcon icon={faArrowLeft} />}
+            onClick={() => navigate(-1)}
+            sx={{ mt: 2 }}
+            color="inherit"
+          >
+            Go Back
+          </Button>
+        </Container>
+      </Box>
+    );
+  }
+
+  const discount = Math.round((1 - product.price / (product.originalPrice || product.price)) * 100);
 
   const handleAddToCart = () => {
     toast.success("장바구니에 추가되었습니다!");
@@ -104,56 +104,32 @@ const ProductDetail = () => {
                 
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <Rating value={product.rating} readOnly />
-                  <Typography variant="body2" color="text.secondary">
-                    {product.sales}+ 구매
-                  </Typography>
+                  {product.sales && (
+                    <Typography variant="body2" color="text.secondary">
+                      {product.sales}+ 구매
+                    </Typography>
+                  )}
                 </Box>
 
                 <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 2 }}>
                   <Typography variant="h4" component="span">
                     ${product.price}
                   </Typography>
-                  <Typography
-                    variant="h6"
-                    component="span"
-                    color="text.secondary"
-                    sx={{ textDecoration: 'line-through' }}
-                  >
-                    ${product.originalPrice}
-                  </Typography>
-                  <Typography variant="h6" component="span" color="error.main">
-                    -{discount}%
-                  </Typography>
-                </Box>
-
-                <Typography variant="body1" color="text.secondary" paragraph>
-                  {product.description}
-                </Typography>
-
-                <Box sx={{ my: 2 }}>
-                  <Typography variant="h6" gutterBottom>주요 특징:</Typography>
-                  <List>
-                    {product.features.map((feature, index) => (
-                      <ListItem key={index} sx={{ py: 0.5 }}>
-                        <ListItemText primary={feature} />
-                      </ListItem>
-                    ))}
-                  </List>
-                </Box>
-
-                <Divider />
-
-                <Box sx={{ my: 2 }}>
-                  <Typography variant="h6" gutterBottom>제품 상세:</Typography>
-                  <Grid container spacing={1}>
-                    {Object.entries(product.specifications).map(([key, value]) => (
-                      <Grid item xs={6} key={key}>
-                        <Typography variant="body2" color="text.secondary">
-                          {key}: {value}
-                        </Typography>
-                      </Grid>
-                    ))}
-                  </Grid>
+                  {product.originalPrice && (
+                    <Typography
+                      variant="h6"
+                      component="span"
+                      color="text.secondary"
+                      sx={{ textDecoration: 'line-through' }}
+                    >
+                      ${product.originalPrice}
+                    </Typography>
+                  )}
+                  {discount > 0 && (
+                    <Typography variant="h6" component="span" color="error.main">
+                      -{discount}%
+                    </Typography>
+                  )}
                 </Box>
 
                 <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>

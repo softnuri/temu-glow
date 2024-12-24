@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 import CategoryNav from '../components/CategoryNav';
 import ProductCard from '../components/ProductCard';
 
-const allProducts = {
+export const allProducts = {
   electronics: [
     {
       id: 1,
