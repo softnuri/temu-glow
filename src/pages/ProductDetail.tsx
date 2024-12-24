@@ -11,14 +11,16 @@ import {
   List,
   ListItem,
   ListItemText,
-  Divider
+  Divider,
+  Chip
 } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faArrowLeft, 
   faHeart, 
   faShare,
-  faStar
+  faStar,
+  faCheck
 } from '@fortawesome/free-solid-svg-icons';
 import Navbar from '../components/Navbar';
 import { toast } from 'sonner';
@@ -103,10 +105,13 @@ const ProductDetail = () => {
                 </Typography>
                 
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Rating value={product.rating} readOnly />
+                  <Rating value={product.rating} readOnly precision={0.1} />
+                  <Typography variant="body2" color="text.secondary">
+                    ({product.rating})
+                  </Typography>
                   {product.sales && (
                     <Typography variant="body2" color="text.secondary">
-                      {product.sales}+ 구매
+                      {product.sales}+ sold
                     </Typography>
                   )}
                 </Box>
@@ -132,14 +137,51 @@ const ProductDetail = () => {
                   )}
                 </Box>
 
-                <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+                <Typography variant="body1" color="text.secondary" sx={{ mt: 2 }}>
+                  {product.description}
+                </Typography>
+
+                <Box sx={{ mt: 3 }}>
+                  <Typography variant="h6" gutterBottom>
+                    Specifications
+                  </Typography>
+                  <List>
+                    {Object.entries(product.specifications).map(([key, value]) => (
+                      <ListItem key={key} sx={{ py: 1 }}>
+                        <ListItemText
+                          primary={key.charAt(0).toUpperCase() + key.slice(1)}
+                          secondary={value}
+                        />
+                      </ListItem>
+                    ))}
+                  </List>
+                </Box>
+
+                <Box sx={{ mt: 3 }}>
+                  <Typography variant="h6" gutterBottom>
+                    Key Features
+                  </Typography>
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                    {product.features.map((feature, index) => (
+                      <Chip
+                        key={index}
+                        icon={<FontAwesomeIcon icon={faCheck} />}
+                        label={feature}
+                        variant="outlined"
+                        sx={{ borderRadius: 1 }}
+                      />
+                    ))}
+                  </Box>
+                </Box>
+
+                <Box sx={{ display: 'flex', gap: 2, mt: 4 }}>
                   <Button
                     variant="contained"
                     size="large"
                     onClick={handleAddToCart}
                     fullWidth
                   >
-                    장바구니 담기
+                    Add to Cart
                   </Button>
                   <IconButton onClick={() => toast.success("위시리스트에 추가되었습니다!")}>
                     <FontAwesomeIcon icon={faHeart} />
