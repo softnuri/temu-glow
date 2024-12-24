@@ -27,7 +27,7 @@ const Profile = () => {
   const navigate = useNavigate();
 
   const menuItems = [
-    { icon: faShoppingBag, text: '주문 내역', onClick: () => console.log('주문 내역') },
+    { icon: faShoppingBag, text: '주문 내역', onClick: () => navigate('/cart') },
     { icon: faHeart, text: '위시리스트', onClick: () => navigate('/wishlist') },
     { icon: faLocationDot, text: '배송지 관리', onClick: () => console.log('배송지 관리') },
     { icon: faCreditCard, text: '결제 수단', onClick: () => console.log('결제 수단') },
@@ -40,9 +40,7 @@ const Profile = () => {
       <Container maxWidth="md" sx={{ py: 4 }}>
         <Paper elevation={1} sx={{ p: 4, mb: 4 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, mb: 4 }}>
-            <Avatar
-              sx={{ width: 100, height: 100 }}
-            >
+            <Avatar sx={{ width: 100, height: 100 }}>
               <FontAwesomeIcon icon={faUser} size="2x" />
             </Avatar>
             <Box>
@@ -69,9 +67,8 @@ const Profile = () => {
             {menuItems.map((item, index) => (
               <ListItem
                 key={index}
-                button
+                sx={{ py: 2, cursor: 'pointer', '&:hover': { bgcolor: 'grey.100' } }}
                 onClick={item.onClick}
-                sx={{ py: 2 }}
               >
                 <ListItemIcon>
                   <FontAwesomeIcon icon={item.icon} />

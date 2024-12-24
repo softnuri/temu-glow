@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   AppBar,
   Toolbar,
@@ -64,6 +64,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const categories = [
     { id: 'electronics', name: 'Electronics' },
@@ -118,16 +119,15 @@ const Navbar = () => {
 
           <Box sx={{ display: 'flex', gap: 1 }}>
             <IconButton
-              component={Link}
-              to="/wishlist"
+              onClick={() => navigate('/wishlist')}
               sx={{ display: { xs: 'none', md: 'flex' } }}
             >
               <FontAwesomeIcon icon={faHeart} />
             </IconButton>
-            <IconButton component={Link} to="/account">
+            <IconButton onClick={() => navigate('/profile')}>
               <FontAwesomeIcon icon={faUser} />
             </IconButton>
-            <IconButton component={Link} to="/cart">
+            <IconButton onClick={() => navigate('/cart')}>
               <FontAwesomeIcon icon={faShoppingCart} />
             </IconButton>
           </Box>
@@ -163,9 +163,11 @@ const Navbar = () => {
             {categories.map((category) => (
               <ListItem
                 key={category.id}
-                component={Link}
-                to={`/category/${category.id}`}
-                onClick={() => setIsMenuOpen(false)}
+                onClick={() => {
+                  navigate(`/category/${category.id}`);
+                  setIsMenuOpen(false);
+                }}
+                sx={{ cursor: 'pointer' }}
               >
                 <ListItemText primary={category.name} />
               </ListItem>
