@@ -1,7 +1,19 @@
-import { Button } from './ui/button';
-import { Card, CardContent, CardFooter } from './ui/card';
-import { Star } from 'lucide-react';
+import { useState } from 'react';
+import {
+  Card,
+  CardContent,
+  CardActions,
+  Typography,
+  IconButton,
+  Button,
+  Box,
+  Rating,
+} from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 interface ProductCardProps {
   id: number;
@@ -13,69 +25,146 @@ interface ProductCardProps {
   sales?: number;
 }
 
-const ProductCard = ({ 
-  id, 
-  title, 
-  price, 
-  originalPrice, 
-  image, 
-  rating, 
-  sales 
+const ProductCard = ({
+  id,
+  title,
+  price,
+  originalPrice,
+  image,
+  rating,
+  sales
 }: ProductCardProps) => {
   const navigate = useNavigate();
+  const [isWishlisted, setIsWishlisted] = useState(false);
   const discount = originalPrice ? Math.round((1 - price / originalPrice) * 100) : 0;
 
+  const handleWishlist = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsWishlisted(!isWishlisted);
+    toast.success(isWishlisted ? "위시리스트에서 제거되었습니다." : "위시리스트에 추가되었습니다.");
+  };
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toast.success("장바구니에 추가되었습니다.");
+  };
+
   return (
-    <Card className="h-full flex flex-col hover:shadow-lg transition-shadow border-none cursor-pointer" onClick={() => navigate(`/product/${id}`)}>
-      <CardContent className="p-3">
-        <div className="aspect-square overflow-hidden rounded-lg mb-3 relative">
-          <img
-            src={image}
-            alt={title}
-            className="w-full h-full object-cover hover:scale-105 transition-transform"
-          />
-          {discount > 0 && (
-            <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-              -{discount}%
-            </div>
-          )}
-        </div>
-        <div className="space-y-2">
-          <h3 className="text-sm line-clamp-2">{title}</h3>
-          <div className="flex items-center gap-2">
-            <span className="text-lg font-bold">${price.toFixed(2)}</span>
-            {originalPrice && (
-              <span className="text-sm text-gray-400 line-through">
-                ${originalPrice.toFixed(2)}
-              </span>
-            )}
-          </div>
-          <div className="flex items-center gap-1 text-sm text-gray-500">
-            <div className="flex">
-              {Array.from({ length: 5 }).map((_, index) => (
-                <Star
-                  key={index}
-                  className={`h-4 w-4 ${
-                    index < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
-                  }`}
-                />
-              ))}
-            </div>
-            {sales && <span className="ml-1">{sales}+ sold</span>}
-          </div>
-        </div>
-      </CardContent>
-      <CardFooter className="mt-auto p-3 pt-0">
-        <Button 
-          className="w-full bg-primary hover:bg-primary/90" 
-          onClick={(e) => {
-            e.stopPropagation();
-            console.log(`Add product ${id} to cart`);
+    <Card
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        cursor: 'pointer',
+        '&:hover': {
+          boxShadow: 6,
+          '& .MuiCardMedia-root': {
+            transform: 'scale(1.05)',
+            transition: 'transform 0.3s ease-in-out'
+          }
+        }
+      }}
+      onClick={() => navigate(`/product/${id}`)}
+    >
+      <Box sx={{ position: 'relative', paddingTop: '100%' }}>
+        <img
+          src={image}
+          alt={title}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover'
           }}
+        />
+        {discount > 0 && (
+          <Typography
+            variant="caption"
+            sx={{
+              position: 'absolute',
+              top: 8,
+              left: 8,
+              bgcolor: 'error.main',
+              color: 'white',
+              px: 1,
+              py: 0.5,
+              borderRadius: 1,
+              fontWeight: 'bold'
+            }}
+          >
+            -{discount}%
+          </Typography>
+        )}
+        <IconButton
+          sx={{
+            position: 'absolute',
+            top: 8,
+            right: 8,
+            bgcolor: 'background.paper',
+            '&:hover': { bgcolor: 'grey.200' }
+          }}
+          onClick={handleWishlist}
+        >
+          <FontAwesomeIcon
+            icon={isWishlisted ? faHeartSolid : faHeartRegular}
+            color={isWishlisted ? '#f44336' : undefined}
+          />
+        </IconButton>
+      </Box>
+
+      <CardContent sx={{ flexGrow: 1 }}>
+        <Typography
+          variant="subtitle1"
+          component="h2"
+          sx={{
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            mb: 1
+          }}
+        >
+          {title}
+        </Typography>
+
+        <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, mb: 1 }}>
+          <Typography variant="h6" component="span">
+            ${price.toFixed(2)}
+          </Typography>
+          {originalPrice && (
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ textDecoration: 'line-through' }}
+            >
+              ${originalPrice.toFixed(2)}
+            </Typography>
+          )}
+        </Box>
+
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Rating value={rating} readOnly size="small" />
+          {sales && (
+            <Typography variant="body2" color="text.secondary">
+              {sales}+ sold
+            </Typography>
+          )}
+        </Box>
+      </CardContent>
+
+      <CardActions>
+        <Button
+          fullWidth
+          variant="contained"
+          onClick={handleAddToCart}
+          sx={{ textTransform: 'none' }}
         >
           Add to Cart
         </Button>
-      </CardFooter>
+      </CardActions>
     </Card>
   );
 };
