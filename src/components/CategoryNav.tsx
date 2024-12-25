@@ -5,18 +5,18 @@ import {
   faLaptop,
   faTshirt,
   faCouch,
-  faSparkles,
+  faStar,
   faDumbbell,
-  faTeddyBear
+  faGamepad
 } from '@fortawesome/free-solid-svg-icons';
 
 const categories = [
   { id: 'electronics', name: '전자기기', icon: faLaptop, color: '#9b87f5' },
   { id: 'fashion', name: '패션', icon: faTshirt, color: '#D6BCFA' },
   { id: 'home', name: '홈/리빙', icon: faCouch, color: '#F2FCE2' },
-  { id: 'beauty', name: '뷰티', icon: faSparkles, color: '#FEF7CD' },
+  { id: 'beauty', name: '뷰티', icon: faStar, color: '#FEF7CD' },
   { id: 'sports', name: '스포츠', icon: faDumbbell, color: '#FEC6A1' },
-  { id: 'toys', name: '완구', icon: faTeddyBear, color: '#F1F0FB' },
+  { id: 'toys', name: '완구', icon: faGamepad, color: '#F1F0FB' },
 ];
 
 const CategoryNav = () => {
