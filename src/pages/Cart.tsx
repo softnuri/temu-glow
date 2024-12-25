@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Container,
   Typography,
@@ -26,27 +26,29 @@ interface CartItem {
 }
 
 const Cart = () => {
-  // 실제 프로젝트에서는 전역 상태 관리나 API를 통해 장바구니 데이터를 관리해야 합니다
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      id: 1,
-      title: "Anti-Aging Face Cream",
-      price: 24.99,
-      quantity: 2,
-      image: "https://picsum.photos/200/200"
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+  useEffect(() => {
+    const storedItems = localStorage.getItem('cartItems');
+    if (storedItems) {
+      setCartItems(JSON.parse(storedItems));
     }
-  ]);
+  }, []);
 
   const removeFromCart = (id: number) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
+    const updatedItems = cartItems.filter(item => item.id !== id);
+    setCartItems(updatedItems);
+    localStorage.setItem('cartItems', JSON.stringify(updatedItems));
     toast.success("상품이 장바구니에서 제거되었습니다.");
   };
 
   const updateQuantity = (id: number, newQuantity: number) => {
     if (newQuantity < 1) return;
-    setCartItems(cartItems.map(item =>
+    const updatedItems = cartItems.map(item =>
       item.id === id ? { ...item, quantity: newQuantity } : item
-    ));
+    );
+    setCartItems(updatedItems);
+    localStorage.setItem('cartItems', JSON.stringify(updatedItems));
   };
 
   const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);

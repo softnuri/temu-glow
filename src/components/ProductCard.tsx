@@ -25,6 +25,18 @@ interface ProductCardProps {
   sales?: number;
 }
 
+// Create a function to get stored cart items
+const getStoredCartItems = () => {
+  const storedItems = localStorage.getItem('cartItems');
+  return storedItems ? JSON.parse(storedItems) : [];
+};
+
+// Create a function to get stored wishlist items
+const getStoredWishlistItems = () => {
+  const storedItems = localStorage.getItem('wishlistItems');
+  return storedItems ? JSON.parse(storedItems) : [];
+};
+
 const ProductCard = ({
   id,
   title,
@@ -35,28 +47,49 @@ const ProductCard = ({
   sales
 }: ProductCardProps) => {
   const navigate = useNavigate();
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [isWishlisted, setIsWishlisted] = useState(() => {
+    const wishlistItems = getStoredWishlistItems();
+    return wishlistItems.some((item: ProductCardProps) => item.id === id);
+  });
+  
   const discount = originalPrice ? Math.round((1 - price / originalPrice) * 100) : 0;
 
   const handleWishlist = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsWishlisted(!isWishlisted);
-    
-    // 실제 프로젝트에서는 여기서 API 호출을 통해 위시리스트에 추가/제거
+    const wishlistItems = getStoredWishlistItems();
     const product = { id, title, price, originalPrice, image, rating, sales };
+    
     if (!isWishlisted) {
-      // Add to wishlist logic
+      // Add to wishlist
+      const updatedWishlist = [...wishlistItems, product];
+      localStorage.setItem('wishlistItems', JSON.stringify(updatedWishlist));
       toast.success(`${title}이(가) 위시리스트에 추가되었습니다.`);
     } else {
-      // Remove from wishlist logic
+      // Remove from wishlist
+      const updatedWishlist = wishlistItems.filter((item: ProductCardProps) => item.id !== id);
+      localStorage.setItem('wishlistItems', JSON.stringify(updatedWishlist));
       toast.success(`${title}이(가) 위시리스트에서 제거되었습니다.`);
     }
+    setIsWishlisted(!isWishlisted);
   };
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // 실제 프로젝트에서는 여기서 API 호출을 통해 장바구니에 추가
+    const cartItems = getStoredCartItems();
     const product = { id, title, price, originalPrice, image, rating, sales, quantity: 1 };
+    
+    // Check if product already exists in cart
+    const existingProductIndex = cartItems.findIndex((item: ProductCardProps) => item.id === id);
+    
+    if (existingProductIndex !== -1) {
+      // Update quantity if product exists
+      cartItems[existingProductIndex].quantity += 1;
+    } else {
+      // Add new product if it doesn't exist
+      cartItems.push(product);
+    }
+    
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
     toast.success(`${title}이(가) 장바구니에 추가되었습니다.`);
   };
 

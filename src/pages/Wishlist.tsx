@@ -5,7 +5,7 @@ import {
   Box,
   IconButton,
 } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import Navbar from '../components/Navbar';
@@ -23,21 +23,19 @@ interface WishlistItem {
 }
 
 const Wishlist = () => {
-  // 실제 프로젝트에서는 전역 상태 관리나 API를 통해 위시리스트 데이터를 관리해야 합니다
-  const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([
-    {
-      id: 1,
-      title: "Anti-Aging Face Cream",
-      price: 24.99,
-      originalPrice: 44.99,
-      image: "https://picsum.photos/200/200",
-      rating: 4,
-      sales: 3456
+  const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
+
+  useEffect(() => {
+    const storedItems = localStorage.getItem('wishlistItems');
+    if (storedItems) {
+      setWishlistItems(JSON.parse(storedItems));
     }
-  ]);
+  }, []);
 
   const removeFromWishlist = (id: number) => {
-    setWishlistItems(wishlistItems.filter(item => item.id !== id));
+    const updatedItems = wishlistItems.filter(item => item.id !== id);
+    setWishlistItems(updatedItems);
+    localStorage.setItem('wishlistItems', JSON.stringify(updatedItems));
     toast.success("상품이 위시리스트에서 제거되었습니다.");
   };
 
