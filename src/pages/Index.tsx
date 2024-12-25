@@ -4,6 +4,8 @@ import Navbar from '../components/Navbar';
 import CategoryNav from '../components/CategoryNav';
 import ProductCard from '../components/ProductCard';
 import MainBanner from '../components/MainBanner';
+import BestProducts from '../components/BestProducts';
+import NewProducts from '../components/NewProducts';
 
 export const allProducts = {
   electronics: [
@@ -231,9 +233,15 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar onSearch={setSearchQuery} />
-      <CategoryNav />
       <main className="container mx-auto px-4 py-6">
         {!categoryId && <MainBanner />}
+        <CategoryNav />
+        {!categoryId && (
+          <>
+            <BestProducts />
+            <NewProducts />
+          </>
+        )}
         <div className={`bg-white rounded-lg p-4 mb-6 shadow-sm`}>
           <h1 className="text-xl font-bold text-gray-800">
             {categoryId ? getCategoryTitle(categoryId) : '추천 상품'}

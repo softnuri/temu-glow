@@ -39,7 +39,7 @@ const banners = [
 
 const MainBanner = () => {
   return (
-    <div className="w-full h-[400px] mb-8">
+    <div className="w-full h-[200px] mb-8">
       <Swiper
         spaceBetween={0}
         centeredSlides={true}
