@@ -29,9 +29,9 @@ const Profile = () => {
   const menuItems = [
     { icon: faShoppingBag, text: '주문 내역', onClick: () => navigate('/cart') },
     { icon: faHeart, text: '위시리스트', onClick: () => navigate('/wishlist') },
-    { icon: faLocationDot, text: '배송지 관리', onClick: () => console.log('배송지 관리') },
-    { icon: faCreditCard, text: '결제 수단', onClick: () => console.log('결제 수단') },
-    { icon: faGear, text: '설정', onClick: () => console.log('설정') },
+    { icon: faLocationDot, text: '배송지 관리', onClick: () => navigate('/profile/address') },
+    { icon: faCreditCard, text: '결제 수단', onClick: () => navigate('/profile/payment') },
+    { icon: faGear, text: '설정', onClick: () => navigate('/profile/settings') },
   ];
 
   return (
@@ -54,7 +54,7 @@ const Profile = () => {
                 variant="outlined"
                 size="small"
                 sx={{ mt: 1 }}
-                onClick={() => console.log('프로필 수정')}
+                onClick={() => navigate('/profile/edit')}
               >
                 프로필 수정
               </Button>

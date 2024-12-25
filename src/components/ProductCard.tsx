@@ -41,14 +41,23 @@ const ProductCard = ({
   const handleWishlist = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsWishlisted(!isWishlisted);
+    
     // 실제 프로젝트에서는 여기서 API 호출을 통해 위시리스트에 추가/제거
-    toast.success(isWishlisted ? "위시리스트에서 제거되었습니다." : "위시리스트에 추가되었습니다.");
+    const product = { id, title, price, originalPrice, image, rating, sales };
+    if (!isWishlisted) {
+      // Add to wishlist logic
+      toast.success(`${title}이(가) 위시리스트에 추가되었습니다.`);
+    } else {
+      // Remove from wishlist logic
+      toast.success(`${title}이(가) 위시리스트에서 제거되었습니다.`);
+    }
   };
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
     // 실제 프로젝트에서는 여기서 API 호출을 통해 장바구니에 추가
-    toast.success("장바구니에 추가되었습니다.");
+    const product = { id, title, price, originalPrice, image, rating, sales, quantity: 1 };
+    toast.success(`${title}이(가) 장바구니에 추가되었습니다.`);
   };
 
   return (
