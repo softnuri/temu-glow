@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import CategoryNav from '../components/CategoryNav';
 import ProductCard from '../components/ProductCard';
+import MainBanner from '../components/MainBanner';
 
 export const allProducts = {
   electronics: [
@@ -217,10 +218,8 @@ const Index = () => {
   const { id: categoryId } = useParams();
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Flatten all products into a single array
   const allProductsList = Object.values(allProducts).flat();
 
-  // Filter products based on category and search query
   const filteredProducts = categoryId
     ? allProducts[categoryId as keyof typeof allProducts]?.filter(product =>
         product.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -234,9 +233,10 @@ const Index = () => {
       <Navbar onSearch={setSearchQuery} />
       <CategoryNav />
       <main className="container mx-auto px-4 py-6">
+        {!categoryId && <MainBanner />}
         <div className={`bg-white rounded-lg p-4 mb-6 shadow-sm`}>
           <h1 className="text-xl font-bold text-gray-800">
-            {categoryId ? getCategoryTitle(categoryId) : 'Featured Products'}
+            {categoryId ? getCategoryTitle(categoryId) : '추천 상품'}
           </h1>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
@@ -251,14 +251,14 @@ const Index = () => {
 
 const getCategoryTitle = (categoryId: string) => {
   const titles: { [key: string]: string } = {
-    electronics: 'Electronics',
-    fashion: 'Fashion',
-    home: 'Home & Garden',
-    beauty: 'Beauty',
-    sports: 'Sports',
-    toys: 'Toys',
+    electronics: '전자기기',
+    fashion: '패션',
+    home: '홈/리빙',
+    beauty: '뷰티',
+    sports: '스포츠',
+    toys: '완구',
   };
-  return titles[categoryId] || 'Featured Products';
+  return titles[categoryId] || '추천 상품';
 };
 
 export default Index;

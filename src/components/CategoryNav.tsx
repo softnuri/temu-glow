@@ -1,85 +1,92 @@
 import { Link } from 'react-router-dom';
-import { 
-  Paper,
-  Container,
-  Box,
-  Typography,
-  styled
-} from '@mui/material';
+import { Container, Box, Typography } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-  faPlug,
+  faLaptop,
   faTshirt,
-  faHome,
-  faStar,
-  faFutbol,
-  faBabyCarriage
+  faCouch,
+  faSparkles,
+  faDumbbell,
+  faTeddyBear
 } from '@fortawesome/free-solid-svg-icons';
 
 const categories = [
-  { id: 'electronics', name: 'Electronics', icon: faPlug },
-  { id: 'fashion', name: 'Fashion', icon: faTshirt },
-  { id: 'home', name: 'Home & Garden', icon: faHome },
-  { id: 'beauty', name: 'Beauty', icon: faStar },
-  { id: 'sports', name: 'Sports', icon: faFutbol },
-  { id: 'toys', name: 'Toys', icon: faBabyCarriage },
+  { id: 'electronics', name: '전자기기', icon: faLaptop, color: '#9b87f5' },
+  { id: 'fashion', name: '패션', icon: faTshirt, color: '#D6BCFA' },
+  { id: 'home', name: '홈/리빙', icon: faCouch, color: '#F2FCE2' },
+  { id: 'beauty', name: '뷰티', icon: faSparkles, color: '#FEF7CD' },
+  { id: 'sports', name: '스포츠', icon: faDumbbell, color: '#FEC6A1' },
+  { id: 'toys', name: '완구', icon: faTeddyBear, color: '#F1F0FB' },
 ];
-
-const CategoryLink = styled(Link)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  padding: theme.spacing(1),
-  minWidth: '4rem',
-  textDecoration: 'none',
-  color: theme.palette.text.primary,
-  transition: theme.transitions.create(['color', 'transform']),
-  '&:hover': {
-    color: theme.palette.primary.main,
-    transform: 'translateY(-2px)',
-  },
-}));
 
 const CategoryNav = () => {
   return (
-    <Paper elevation={0} sx={{ borderBottom: 1, borderColor: 'divider' }}>
+    <Box 
+      sx={{ 
+        borderBottom: '1px solid',
+        borderColor: 'divider',
+        backgroundColor: 'white',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 10
+      }}
+    >
       <Container maxWidth="xl">
         <Box sx={{
           display: 'flex',
-          gap: 4,
-          overflowX: 'auto',
-          py: 2,
+          justifyContent: 'center',
+          gap: 6,
+          py: 3,
           px: 2,
-          '&::-webkit-scrollbar': {
-            display: 'none'
-          },
+          overflowX: 'auto',
+          '&::-webkit-scrollbar': { display: 'none' },
           scrollbarWidth: 'none',
         }}>
           {categories.map((category) => (
-            <CategoryLink
+            <Link
               key={category.id}
               to={`/category/${category.id}`}
+              className="group flex flex-col items-center min-w-[80px] text-decoration-none transition-all duration-300 hover:-translate-y-1"
+              style={{ color: 'inherit', textDecoration: 'none' }}
             >
-              <FontAwesomeIcon 
-                icon={category.icon} 
-                size="2x"
-                style={{ marginBottom: '0.5rem' }}
-              />
+              <Box
+                sx={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: category.color,
+                  marginBottom: 1,
+                  transition: 'transform 0.2s',
+                  '&:hover': {
+                    transform: 'scale(1.05)',
+                  }
+                }}
+              >
+                <FontAwesomeIcon 
+                  icon={category.icon}
+                  size="lg"
+                  style={{ color: '#1A1F2C' }}
+                />
+              </Box>
               <Typography
-                variant="caption"
-                component="span"
-                sx={{ 
-                  whiteSpace: 'nowrap',
-                  fontWeight: 500
+                variant="body2"
+                sx={{
+                  fontWeight: 500,
+                  textAlign: 'center',
+                  color: '#1A1F2C',
                 }}
               >
                 {category.name}
               </Typography>
-            </CategoryLink>
+            </Link>
           ))}
         </Box>
       </Container>
-    </Paper>
+    </Box>
   );
 };
 

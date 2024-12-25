@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Container,
   Typography,
@@ -26,6 +27,7 @@ interface CartItem {
 }
 
 const Cart = () => {
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
@@ -51,6 +53,10 @@ const Cart = () => {
     localStorage.setItem('cartItems', JSON.stringify(updatedItems));
   };
 
+  const handleProductClick = (id: number) => {
+    navigate(`/product/${id}`);
+  };
+
   const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
   return (
@@ -69,7 +75,17 @@ const Cart = () => {
           ) : (
             <List>
               {cartItems.map((item) => (
-                <ListItem key={item.id} sx={{ py: 2 }}>
+                <ListItem 
+                  key={item.id} 
+                  sx={{ 
+                    py: 2,
+                    cursor: 'pointer',
+                    '&:hover': {
+                      bgcolor: 'rgba(0, 0, 0, 0.04)'
+                    }
+                  }}
+                  onClick={() => handleProductClick(item.id)}
+                >
                   <Box sx={{ display: 'flex', gap: 2, width: '100%' }}>
                     <img
                       src={item.image}
@@ -89,14 +105,20 @@ const Cart = () => {
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Button
                           size="small"
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            updateQuantity(item.id, item.quantity - 1);
+                          }}
                         >
                           -
                         </Button>
                         <Typography>{item.quantity}</Typography>
                         <Button
                           size="small"
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            updateQuantity(item.id, item.quantity + 1);
+                          }}
                         >
                           +
                         </Button>
@@ -105,7 +127,10 @@ const Cart = () => {
                     <ListItemSecondaryAction>
                       <IconButton
                         edge="end"
-                        onClick={() => removeFromCart(item.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeFromCart(item.id);
+                        }}
                         color="error"
                       >
                         <FontAwesomeIcon icon={faTrash} />
