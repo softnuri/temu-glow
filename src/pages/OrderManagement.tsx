@@ -9,6 +9,7 @@ import {
   Button,
   List,
   ListItem,
+  ListItemText,
   Chip,
 } from '@mui/material';
 import Navbar from '../components/Navbar';
@@ -19,6 +20,7 @@ interface OrderItem {
   title: string;
   quantity: number;
   price: number;
+  image: string;
 }
 
 interface Order {
