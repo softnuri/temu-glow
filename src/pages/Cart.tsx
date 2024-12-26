@@ -57,6 +57,33 @@ const Cart = () => {
     navigate(`/product/${id}`);
   };
 
+  const handleOrder = () => {
+    // Get existing orders from localStorage
+    const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+    
+    // Create new order
+    const newOrder = {
+      id: Date.now(), // Use timestamp as unique ID
+      date: new Date().toISOString(),
+      status: 'pending',
+      items: cartItems,
+      total: total
+    };
+    
+    // Add new order to existing orders
+    const updatedOrders = [...existingOrders, newOrder];
+    
+    // Save updated orders to localStorage
+    localStorage.setItem('orders', JSON.stringify(updatedOrders));
+    
+    // Clear cart
+    localStorage.setItem('cartItems', '[]');
+    setCartItems([]);
+    
+    toast.success("주문이 완료되었습니다!");
+    navigate('/profile/orders');
+  };
+
   const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
   return (
@@ -157,7 +184,7 @@ const Cart = () => {
               variant="contained"
               color="primary"
               fullWidth
-              onClick={() => toast.success("주문이 완료되었습니다!")}
+              onClick={handleOrder}
             >
               주문하기
             </Button>

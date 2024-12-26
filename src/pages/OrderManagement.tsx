@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Container,
   Typography,
@@ -14,49 +14,40 @@ import {
 import Navbar from '../components/Navbar';
 import { toast } from 'sonner';
 
+interface OrderItem {
+  id: number;
+  title: string;
+  quantity: number;
+  price: number;
+}
+
 interface Order {
   id: number;
   date: string;
   status: 'pending' | 'completed' | 'cancelled';
-  items: Array<{
-    id: number;
-    title: string;
-    quantity: number;
-    price: number;
-  }>;
+  items: OrderItem[];
   total: number;
 }
 
 const OrderManagement = () => {
   const [activeTab, setActiveTab] = useState(0);
-  const [orders, setOrders] = useState<Order[]>([
-    {
-      id: 1,
-      date: '2024-03-15T14:30:00',
-      status: 'pending',
-      items: [
-        { id: 1, title: '상품 1', quantity: 2, price: 20000 },
-        { id: 2, title: '상품 2', quantity: 1, price: 30000 },
-      ],
-      total: 70000,
-    },
-    {
-      id: 2,
-      date: '2024-03-14T09:15:00',
-      status: 'completed',
-      items: [
-        { id: 3, title: '상품 3', quantity: 1, price: 15000 },
-      ],
-      total: 15000,
-    },
-  ]);
+  const [orders, setOrders] = useState<Order[]>([]);
+
+  useEffect(() => {
+    const storedOrders = localStorage.getItem('orders');
+    if (storedOrders) {
+      setOrders(JSON.parse(storedOrders));
+    }
+  }, []);
 
   const handleCancelOrder = (orderId: number) => {
-    setOrders(orders.map(order =>
+    const updatedOrders = orders.map(order =>
       order.id === orderId
         ? { ...order, status: 'cancelled' as const }
         : order
-    ));
+    );
+    setOrders(updatedOrders);
+    localStorage.setItem('orders', JSON.stringify(updatedOrders));
     toast.success('주문이 취소되었습니다.');
   };
 
