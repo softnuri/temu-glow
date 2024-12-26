@@ -32,7 +32,7 @@ const OrderManagement = () => {
   const [orders, setOrders] = useState<Order[]>([
     {
       id: 1,
-      date: '2024-03-15',
+      date: '2024-03-15T14:30:00',
       status: 'pending',
       items: [
         { id: 1, title: '상품 1', quantity: 2, price: 20000 },
@@ -42,7 +42,7 @@ const OrderManagement = () => {
     },
     {
       id: 2,
-      date: '2024-03-14',
+      date: '2024-03-14T09:15:00',
       status: 'completed',
       items: [
         { id: 3, title: '상품 3', quantity: 1, price: 15000 },
@@ -66,6 +66,18 @@ const OrderManagement = () => {
     return order.status === 'cancelled';
   });
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('ko-KR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    }).format(date);
+  };
+
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'grey.50' }}>
       <Navbar />
@@ -88,9 +100,14 @@ const OrderManagement = () => {
           {filteredOrders.map((order) => (
             <Paper key={order.id} sx={{ mb: 2, p: 3 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                <Typography variant="h6">
-                  주문번호: {order.id}
-                </Typography>
+                <Box>
+                  <Typography variant="h6">
+                    주문번호: {order.id}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                    주문일시: {formatDate(order.date)}
+                  </Typography>
+                </Box>
                 <Chip
                   label={
                     order.status === 'pending' ? '진행중' :
@@ -106,10 +123,15 @@ const OrderManagement = () => {
               <List>
                 {order.items.map((item) => (
                   <ListItem key={item.id} sx={{ px: 0 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                      <Typography>
-                        {item.title} x {item.quantity}
-                      </Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+                      <Box>
+                        <Typography variant="body1" fontWeight="medium">
+                          {item.title}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          수량: {item.quantity}개
+                        </Typography>
+                      </Box>
                       <Typography>
                         ₩{item.price.toLocaleString()}
                       </Typography>
