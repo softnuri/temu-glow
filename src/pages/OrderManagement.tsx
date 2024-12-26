@@ -11,6 +11,7 @@ import {
   ListItem,
   ListItemText,
   Chip,
+  Divider,
 } from '@mui/material';
 import Navbar from '../components/Navbar';
 import { toast } from 'sonner';
@@ -113,21 +114,31 @@ const OrderManagement = () => {
                 />
               </Box>
 
-              <List>
+              <List sx={{ bgcolor: 'background.paper', borderRadius: 1 }}>
                 {order.items.map((item) => (
-                  <ListItem key={item.id} sx={{ px: 0 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
-                      <Box>
-                        <Typography variant="body1" fontWeight="medium">
+                  <ListItem key={item.id} sx={{ py: 2 }}>
+                    <Box sx={{ display: 'flex', width: '100%', gap: 2 }}>
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        style={{
+                          width: 80,
+                          height: 80,
+                          objectFit: 'cover',
+                          borderRadius: 4
+                        }}
+                      />
+                      <Box sx={{ flexGrow: 1 }}>
+                        <Typography variant="subtitle1">
                           {item.title}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                           수량: {item.quantity}개
                         </Typography>
+                        <Typography variant="body1" sx={{ mt: 1 }}>
+                          ${item.price.toFixed(2)}
+                        </Typography>
                       </Box>
-                      <Typography>
-                        ₩{item.price.toLocaleString()}
-                      </Typography>
                     </Box>
                   </ListItem>
                 ))}
@@ -135,7 +146,7 @@ const OrderManagement = () => {
 
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2, pt: 2, borderTop: 1, borderColor: 'divider' }}>
                 <Typography variant="h6">
-                  총 금액: ₩{order.total.toLocaleString()}
+                  총 금액: ${order.total.toFixed(2)}
                 </Typography>
                 {order.status === 'pending' && (
                   <Button
@@ -149,6 +160,12 @@ const OrderManagement = () => {
               </Box>
             </Paper>
           ))}
+          
+          {filteredOrders.length === 0 && (
+            <Typography variant="body1" sx={{ textAlign: 'center', py: 4 }}>
+              해당하는 주문이 없습니다.
+            </Typography>
+          )}
         </List>
       </Container>
     </Box>
