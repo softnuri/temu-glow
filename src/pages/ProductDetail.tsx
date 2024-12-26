@@ -23,6 +23,7 @@ import {
   faCheck
 } from '@fortawesome/free-solid-svg-icons';
 import Navbar from '../components/Navbar';
+import ReviewSection from '../components/ReviewSection';
 import { toast } from 'sonner';
 import { allProducts } from './Index';
 
@@ -30,7 +31,6 @@ const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Find the product from all categories
   const product = Object.values(allProducts)
     .flat()
     .find(p => p.id === Number(id));
@@ -57,6 +57,22 @@ const ProductDetail = () => {
   const discount = Math.round((1 - product.price / (product.originalPrice || product.price)) * 100);
 
   const handleAddToCart = () => {
+    const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+    const existingItem = cartItems.find((item: any) => item.id === product.id);
+    
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      cartItems.push({
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        quantity: 1,
+        image: product.image
+      });
+    }
+    
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
     toast.success("장바구니에 추가되었습니다!");
   };
 
@@ -193,6 +209,10 @@ const ProductDetail = () => {
               </Box>
             </Grid>
           </Grid>
+        </Paper>
+
+        <Paper elevation={1} sx={{ p: 3, mt: 4, borderRadius: 2 }}>
+          <ReviewSection productId={Number(id)} />
         </Paper>
       </Container>
     </Box>

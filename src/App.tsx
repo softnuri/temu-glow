@@ -12,6 +12,7 @@ import ProfileEdit from "./pages/ProfileEdit";
 import AddressManagement from "./pages/AddressManagement";
 import PaymentMethods from "./pages/PaymentMethods";
 import Settings from "./pages/Settings";
+import OrderManagement from "./pages/OrderManagement";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/profile/address" element={<AddressManagement />} />
           <Route path="/profile/payment" element={<PaymentMethods />} />
           <Route path="/profile/settings" element={<Settings />} />
+          <Route path="/profile/orders" element={<OrderManagement />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

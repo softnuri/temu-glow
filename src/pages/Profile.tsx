@@ -19,6 +19,7 @@ import {
   faLocationDot,
   faCreditCard,
   faGear,
+  faClipboardList,
 } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
@@ -27,7 +28,8 @@ const Profile = () => {
   const navigate = useNavigate();
 
   const menuItems = [
-    { icon: faShoppingBag, text: '주문 내역', onClick: () => navigate('/cart') },
+    { icon: faClipboardList, text: '주문 관리', onClick: () => navigate('/profile/orders') },
+    { icon: faShoppingBag, text: '장바구니', onClick: () => navigate('/cart') },
     { icon: faHeart, text: '위시리스트', onClick: () => navigate('/wishlist') },
     { icon: faLocationDot, text: '배송지 관리', onClick: () => navigate('/profile/address') },
     { icon: faCreditCard, text: '결제 수단', onClick: () => navigate('/profile/payment') },
