@@ -133,7 +133,8 @@ const Navbar = ({ onSearch }: NavbarProps) => {
           <Box sx={{ display: 'flex', gap: 1 }}>
             <IconButton
               onClick={() => navigate('/wishlist')}
-              sx={{ display: { xs: 'none', md: 'flex' } }}
+              sx={{ display: 'flex' }}
+              aria-label="위시리스트"
             >
               <FontAwesomeIcon icon={faHeart} />
             </IconButton>
