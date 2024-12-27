@@ -39,6 +39,7 @@ const Checkout = () => {
     paymentMethod: "card",
   });
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showComplete, setShowComplete] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -63,18 +64,20 @@ const Checkout = () => {
 
   const handleConfirmOrder = () => {
     // Here you would typically process the payment and create the order
-    toast.success("주문이 완료되었습니다!");
+    setShowConfirm(false);
+    setShowComplete(true);
+  };
+
+  const handleCompleteOrder = () => {
     navigate("/profile/orders");
   };
+
+  // ... keep existing code (form rendering JSX)
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "grey.50" }}>
       <Navbar />
       <Container maxWidth="md" sx={{ py: 4 }}>
-        <Typography variant="h4" component="h1" sx={{ mb: 4 }}>
-          주문하기
-        </Typography>
-
         <Paper sx={{ p: 3, mb: 4 }}>
           <Typography variant="h6" sx={{ mb: 3 }}>
             주문자 정보
@@ -198,6 +201,20 @@ const Checkout = () => {
             {
               label: "확인",
               onClick: handleConfirmOrder,
+            },
+          ]}
+        />
+
+        <MessageDialog
+          open={showComplete}
+          onClose={() => setShowComplete(false)}
+          title="주문 완료"
+          showTitleImage={true}
+          message="주문이 완료되었습니다."
+          buttons={[
+            {
+              label: "주문내역 보기",
+              onClick: handleCompleteOrder,
             },
           ]}
         />
