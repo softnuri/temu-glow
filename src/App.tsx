@@ -13,6 +13,7 @@ import AddressManagement from "./pages/AddressManagement";
 import PaymentMethods from "./pages/PaymentMethods";
 import Settings from "./pages/Settings";
 import OrderManagement from "./pages/OrderManagement";
+import Checkout from "./pages/Checkout";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/category/:id" element={<Index />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/edit" element={<ProfileEdit />} />
