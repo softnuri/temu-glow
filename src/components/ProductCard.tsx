@@ -165,9 +165,7 @@ const ProductCard = ({
           sx={{
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
+            whiteSpace: 'nowrap',
             mb: 1
           }}
         >
