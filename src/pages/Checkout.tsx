@@ -72,8 +72,6 @@ const Checkout = () => {
     navigate("/profile/orders");
   };
 
-  // ... keep existing code (form rendering JSX)
-
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "grey.50" }}>
       <Navbar />
