@@ -4,14 +4,20 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Container, Paper, Typography, Box } from "@mui/material";
+import { toast } from "sonner";
 
 const AuthPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
-      if (session) {
+      if (event === 'SIGNED_IN' && session) {
+        toast.success('로그인되었습니다');
         navigate("/");
+      } else if (event === 'SIGNED_OUT') {
+        toast.success('로그아웃되었습니다');
+      } else if (event === 'USER_UPDATED') {
+        toast.success('프로필이 업데이트되었습니다');
       }
     });
   }, [navigate]);
