@@ -212,7 +212,11 @@ const ProductDetail = () => {
         </Paper>
 
         <Paper elevation={1} sx={{ p: 3, mt: 4, borderRadius: 2 }}>
-          <ReviewSection productId={Number(id)} />
+          <ReviewSection 
+            productId={Number(id)} 
+            productTitle={product.title}
+            productImage={product.image}
+          />
         </Paper>
       </Container>
     </Box>

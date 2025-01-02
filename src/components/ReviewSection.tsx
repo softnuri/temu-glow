@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Rating } from '@mui/material';
@@ -11,21 +11,37 @@ interface Review {
   rating: number;
   comment: string;
   createdAt: string;
+  productTitle: string;
+  productImage: string;
 }
 
 interface ReviewSectionProps {
   productId: number;
+  productTitle: string;
+  productImage: string;
 }
 
-const ReviewSection = ({ productId }: ReviewSectionProps) => {
+const ReviewSection = ({ productId, productTitle, productImage }: ReviewSectionProps) => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [newReview, setNewReview] = useState({ rating: 5, comment: '' });
   const [editingReview, setEditingReview] = useState<Review | null>(null);
 
+  useEffect(() => {
+    // Load reviews from localStorage
+    const storedReviews = localStorage.getItem('userReviews');
+    if (storedReviews) {
+      const allReviews = JSON.parse(storedReviews);
+      const productReviews = allReviews.filter((review: Review) => review.productId === productId);
+      setReviews(productReviews);
+    }
+  }, [productId]);
+
   const handleSubmitReview = () => {
+    const allReviews = JSON.parse(localStorage.getItem('userReviews') || '[]');
+
     if (editingReview) {
-      // 리뷰 수정
-      const updatedReviews = reviews.map(review =>
+      // Update existing review
+      const updatedAllReviews = allReviews.map((review: Review) =>
         review.id === editingReview.id
           ? {
               ...review,
@@ -34,23 +50,49 @@ const ReviewSection = ({ productId }: ReviewSectionProps) => {
             }
           : review
       );
-      setReviews(updatedReviews);
+      localStorage.setItem('userReviews', JSON.stringify(updatedAllReviews));
+      
+      const updatedProductReviews = reviews.map(review =>
+        review.id === editingReview.id
+          ? {
+              ...review,
+              rating: newReview.rating,
+              comment: newReview.comment,
+            }
+          : review
+      );
+      setReviews(updatedProductReviews);
       setEditingReview(null);
       toast.success('리뷰가 수정되었습니다.');
     } else {
-      // 새 리뷰 작성
+      // Create new review
       const review: Review = {
         id: Date.now(),
         productId,
-        userId: 'user123', // 실제 구현시 로그인된 사용자 ID 사용
+        userId: 'user123',
         rating: newReview.rating,
         comment: newReview.comment,
         createdAt: new Date().toISOString(),
+        productTitle,
+        productImage,
       };
+      
+      const updatedAllReviews = [...allReviews, review];
+      localStorage.setItem('userReviews', JSON.stringify(updatedAllReviews));
+      
       setReviews([...reviews, review]);
       toast.success('리뷰가 등록되었습니다.');
     }
     setNewReview({ rating: 5, comment: '' });
+  };
+
+  const handleDeleteReview = (reviewId: number) => {
+    const allReviews = JSON.parse(localStorage.getItem('userReviews') || '[]');
+    const updatedAllReviews = allReviews.filter((review: Review) => review.id !== reviewId);
+    localStorage.setItem('userReviews', JSON.stringify(updatedAllReviews));
+    
+    setReviews(reviews.filter(r => r.id !== reviewId));
+    toast.success('리뷰가 삭제되었습니다.');
   };
 
   return (
@@ -102,10 +144,7 @@ const ReviewSection = ({ productId }: ReviewSectionProps) => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => {
-                  setReviews(reviews.filter(r => r.id !== review.id));
-                  toast.success('리뷰가 삭제되었습니다.');
-                }}
+                onClick={() => handleDeleteReview(review.id)}
               >
                 삭제
               </Button>
