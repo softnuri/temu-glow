@@ -9,7 +9,6 @@ const AuthPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 이미 로그인한 사용자는 메인 페이지로 리다이렉트
     supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
         navigate("/");
@@ -63,6 +62,9 @@ const AuthPage = () => {
               },
             },
           }}
+          redirectTo={`${window.location.origin}/auth/callback`}
+          showLinks={true}
+          view="sign_in"
         />
       </Paper>
     </Container>
