@@ -108,7 +108,7 @@ const Cart = () => {
                       />
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Button
-                          size="small"
+                          size="sm"
                           onClick={(e) => {
                             e.stopPropagation();
                             updateQuantity(item.id, item.quantity - 1);
@@ -118,7 +118,7 @@ const Cart = () => {
                         </Button>
                         <Typography>{item.quantity}</Typography>
                         <Button
-                          size="small"
+                          size="sm"
                           onClick={(e) => {
                             e.stopPropagation();
                             updateQuantity(item.id, item.quantity + 1);
