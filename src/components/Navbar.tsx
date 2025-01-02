@@ -13,7 +13,8 @@ import {
   ListItemText,
   Container,
   alpha,
-  styled
+  styled,
+  Button
 } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -21,8 +22,12 @@ import {
   faSearch,
   faBars,
   faUser,
-  faHeart
+  faHeart,
+  faSignOutAlt
 } from '@fortawesome/free-solid-svg-icons';
+import { useAuth } from './AuthProvider';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -70,11 +75,22 @@ const Navbar = ({ onSearch }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const navigate = useNavigate();
+  const { session } = useAuth();
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setSearchValue(value);
     onSearch?.(value);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      toast.success('로그아웃되었습니다');
+      navigate('/');
+    } catch (error) {
+      toast.error('로그아웃 중 오류가 발생했습니다');
+    }
   };
 
   const categories = [
@@ -130,20 +146,36 @@ const Navbar = ({ onSearch }: NavbarProps) => {
             />
           </Search>
 
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <IconButton
-              onClick={() => navigate('/wishlist')}
-              sx={{ display: 'flex' }}
-              aria-label="위시리스트"
-            >
-              <FontAwesomeIcon icon={faHeart} />
-            </IconButton>
-            <IconButton onClick={() => navigate('/profile')}>
-              <FontAwesomeIcon icon={faUser} />
-            </IconButton>
-            <IconButton onClick={() => navigate('/cart')}>
-              <FontAwesomeIcon icon={faShoppingCart} />
-            </IconButton>
+          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+            {session ? (
+              <>
+                <IconButton
+                  onClick={() => navigate('/wishlist')}
+                  sx={{ display: 'flex' }}
+                  aria-label="위시리스트"
+                >
+                  <FontAwesomeIcon icon={faHeart} />
+                </IconButton>
+                <IconButton onClick={() => navigate('/profile')}>
+                  <FontAwesomeIcon icon={faUser} />
+                </IconButton>
+                <IconButton onClick={() => navigate('/cart')}>
+                  <FontAwesomeIcon icon={faShoppingCart} />
+                </IconButton>
+                <IconButton onClick={handleLogout} color="error">
+                  <FontAwesomeIcon icon={faSignOutAlt} />
+                </IconButton>
+              </>
+            ) : (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => navigate('/auth')}
+                sx={{ ml: 2 }}
+              >
+                로그인
+              </Button>
+            )}
           </Box>
         </Toolbar>
 
