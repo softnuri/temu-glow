@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Container,
   Typography,
@@ -6,13 +7,12 @@ import {
   Paper,
   Divider,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { MessageDialog } from "@/components/MessageDialog";
+import Navbar from "../components/Navbar";
+import { PaymentDialog } from "@/components/PaymentDialog";
 
 interface OrderInfo {
   name: string;
@@ -29,6 +29,7 @@ interface OrderInfo {
 }
 
 const Checkout = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const [orderInfo, setOrderInfo] = useState<OrderInfo>({
     name: "",
@@ -38,8 +39,17 @@ const Checkout = () => {
     addressDetail: "",
     paymentMethod: "card",
   });
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [showComplete, setShowComplete] = useState(false);
+  
+  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+
+  // Redirect if no cart items
+  if (!location.state?.cartItems) {
+    navigate('/cart');
+    return null;
+  }
+
+  const { cartItems, total } = location.state;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -49,7 +59,7 @@ const Checkout = () => {
     }));
   };
 
-  const handleSubmit = () => {
+  const handlePayment = () => {
     // Validate required fields
     const requiredFields = ["name", "phone", "email", "address"];
     const missingFields = requiredFields.filter((field) => !orderInfo[field as keyof OrderInfo]);
@@ -59,17 +69,15 @@ const Checkout = () => {
       return;
     }
 
-    setShowConfirm(true);
-  };
+    // Simulate payment process (success 80% of the time)
+    const success = Math.random() > 0.2;
+    setPaymentSuccess(success);
+    setShowPaymentDialog(true);
 
-  const handleConfirmOrder = () => {
-    // Here you would typically process the payment and create the order
-    setShowConfirm(false);
-    setShowComplete(true);
-  };
-
-  const handleCompleteOrder = () => {
-    navigate("/profile/orders");
+    if (success) {
+      // Clear cart on successful payment
+      localStorage.setItem('cartItems', '[]');
+    }
   };
 
   return (
@@ -179,42 +187,15 @@ const Checkout = () => {
         </Paper>
 
         <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-          <Button size="lg" onClick={handleSubmit}>
-            주문하기
+          <Button size="lg" onClick={handlePayment}>
+            결제하기
           </Button>
         </Box>
 
-        <MessageDialog
-          open={showConfirm}
-          onClose={() => setShowConfirm(false)}
-          title="주문 확인"
-          showTitleImage={true}
-          message="주문을 진행하시겠습니까?"
-          buttons={[
-            {
-              label: "취소",
-              variant: "outline",
-              onClick: () => setShowConfirm(false),
-            },
-            {
-              label: "확인",
-              onClick: handleConfirmOrder,
-            },
-          ]}
-        />
-
-        <MessageDialog
-          open={showComplete}
-          onClose={() => setShowComplete(false)}
-          title="주문 완료"
-          showTitleImage={true}
-          message="주문이 완료되었습니다."
-          buttons={[
-            {
-              label: "주문내역 보기",
-              onClick: handleCompleteOrder,
-            },
-          ]}
+        <PaymentDialog
+          open={showPaymentDialog}
+          onClose={() => setShowPaymentDialog(false)}
+          success={paymentSuccess}
         />
       </Container>
     </Box>

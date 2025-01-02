@@ -9,10 +9,10 @@ import {
   ListItemText,
   ListItemSecondaryAction,
   IconButton,
-  Button,
   Box,
   Divider,
 } from '@mui/material';
+import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import Navbar from '../components/Navbar';
@@ -57,31 +57,12 @@ const Cart = () => {
     navigate(`/product/${id}`);
   };
 
-  const handleOrder = () => {
-    // Get existing orders from localStorage
-    const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-    
-    // Create new order
-    const newOrder = {
-      id: Date.now(), // Use timestamp as unique ID
-      date: new Date().toISOString(),
-      status: 'pending',
-      items: cartItems,
-      total: total
-    };
-    
-    // Add new order to existing orders
-    const updatedOrders = [...existingOrders, newOrder];
-    
-    // Save updated orders to localStorage
-    localStorage.setItem('orders', JSON.stringify(updatedOrders));
-    
-    // Clear cart
-    localStorage.setItem('cartItems', '[]');
-    setCartItems([]);
-    
-    toast.success("주문이 완료되었습니다!");
-    navigate('/profile/orders');
+  const handleCheckout = () => {
+    if (cartItems.length === 0) {
+      toast.error("장바구니가 비어있습니다.");
+      return;
+    }
+    navigate('/checkout', { state: { cartItems, total } });
   };
 
   const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -90,10 +71,6 @@ const Cart = () => {
     <Box sx={{ minHeight: '100vh', bgcolor: 'grey.50' }}>
       <Navbar />
       <Container maxWidth="md" sx={{ py: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          장바구니
-        </Typography>
-
         <Paper elevation={1} sx={{ p: 2, mb: 4 }}>
           {cartItems.length === 0 ? (
             <Typography variant="body1" sx={{ textAlign: 'center', py: 4 }}>
@@ -181,10 +158,8 @@ const Cart = () => {
               <Typography variant="h6">${total.toFixed(2)}</Typography>
             </Box>
             <Button
-              variant="contained"
-              color="primary"
-              fullWidth
-              onClick={handleOrder}
+              className="w-full"
+              onClick={handleCheckout}
             >
               주문하기
             </Button>
