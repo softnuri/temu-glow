@@ -69,7 +69,6 @@ const Cart = () => {
         (sum, item) => sum + item.price * item.quantity,
         0
     );
-
     return (
         <Box sx={{ minHeight: "100vh", bgcolor: "grey.50" }}>
             <Navbar />
@@ -103,16 +102,29 @@ const Cart = () => {
                                             width: "100%",
                                         }}
                                     >
-                                        <img
-                                            src={item.image}
-                                            alt={item.title}
-                                            style={{
+                                        <Box
+                                            sx={{
                                                 width: 100,
                                                 height: 100,
-                                                objectFit: "cover",
-                                                borderRadius: 4,
+                                                flexShrink: 0,
+                                                position: "relative",
+                                                overflow: "hidden",
+                                                borderRadius: 1,
                                             }}
-                                        />
+                                        >
+                                            <img
+                                                src={item.image}
+                                                alt={item.title}
+                                                style={{
+                                                    width: "100%",
+                                                    height: "100%",
+                                                    objectFit: "cover",
+                                                    position: "absolute",
+                                                    top: 0,
+                                                    left: 0,
+                                                }}
+                                            />
+                                        </Box>
                                         <Box sx={{ flexGrow: 1 }}>
                                             <ListItemText
                                                 primary={
@@ -149,9 +161,6 @@ const Cart = () => {
                                                             item.quantity - 1
                                                         );
                                                     }}
-                                                    style={{
-                                                        transform: "scale(0.8)",
-                                                    }}
                                                 >
                                                     -
                                                 </Button>
@@ -172,9 +181,6 @@ const Cart = () => {
                                                             item.id,
                                                             item.quantity + 1
                                                         );
-                                                    }}
-                                                    style={{
-                                                        transform: "scale(0.8)",
                                                     }}
                                                 >
                                                     +
