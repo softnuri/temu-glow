@@ -5,17 +5,12 @@ import {
     Typography,
     Paper,
     List,
-    ListItem,
-    ListItemText,
-    ListItemSecondaryAction,
-    IconButton,
     Box,
     Divider,
 } from "@mui/material";
 import { Button } from "@/components/ui/button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Navbar from "../components/Navbar";
+import CartItem from "../components/CartItem";
 import { toast } from "sonner";
 
 interface CartItem {
@@ -69,6 +64,7 @@ const Cart = () => {
         (sum, item) => sum + item.price * item.quantity,
         0
     );
+
     return (
         <Box sx={{ minHeight: "100vh", bgcolor: "grey.50" }}>
             <Navbar />
@@ -84,125 +80,13 @@ const Cart = () => {
                     ) : (
                         <List>
                             {cartItems.map((item) => (
-                                <ListItem
+                                <CartItem
                                     key={item.id}
-                                    sx={{
-                                        py: 2,
-                                        cursor: "pointer",
-                                        "&:hover": {
-                                            bgcolor: "rgba(0, 0, 0, 0.04)",
-                                        },
-                                    }}
-                                    onClick={() => handleProductClick(item.id)}
-                                >
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            gap: 2,
-                                            width: "100%",
-                                        }}
-                                    >
-                                        <Box
-                                            sx={{
-                                                width: 100,
-                                                height: 100,
-                                                flexShrink: 0,
-                                                position: "relative",
-                                                overflow: "hidden",
-                                                borderRadius: 1,
-                                            }}
-                                        >
-                                            <img
-                                                src={item.image}
-                                                alt={item.title}
-                                                style={{
-                                                    width: "100%",
-                                                    height: "100%",
-                                                    objectFit: "cover",
-                                                    position: "absolute",
-                                                    top: 0,
-                                                    left: 0,
-                                                }}
-                                            />
-                                        </Box>
-                                        <Box sx={{ flexGrow: 1 }}>
-                                            <ListItemText
-                                                primary={
-                                                    <Typography
-                                                        sx={{
-                                                            overflow: "hidden",
-                                                            textOverflow:
-                                                                "ellipsis",
-                                                            whiteSpace:
-                                                                "nowrap",
-                                                            mb: 1,
-                                                        }}
-                                                    >
-                                                        {item.title}
-                                                    </Typography>
-                                                }
-                                                secondary={`$${item.price.toFixed(
-                                                    2
-                                                )}`}
-                                            />
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    gap: 2,
-                                                }}
-                                            >
-                                                <Button
-                                                    size="sm"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        updateQuantity(
-                                                            item.id,
-                                                            item.quantity - 1
-                                                        );
-                                                    }}
-                                                >
-                                                    -
-                                                </Button>
-                                                <Typography
-                                                    sx={{
-                                                        minWidth: "3ch",
-                                                        textAlign: "center",
-                                                        fontFamily: "monospace",
-                                                    }}
-                                                >
-                                                    {item.quantity}
-                                                </Typography>
-                                                <Button
-                                                    size="sm"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        updateQuantity(
-                                                            item.id,
-                                                            item.quantity + 1
-                                                        );
-                                                    }}
-                                                >
-                                                    +
-                                                </Button>
-                                            </Box>
-                                        </Box>
-                                        <ListItemSecondaryAction>
-                                            <IconButton
-                                                edge="end"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    removeFromCart(item.id);
-                                                }}
-                                                color="error"
-                                            >
-                                                <FontAwesomeIcon
-                                                    icon={faTrash}
-                                                />
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-                                    </Box>
-                                </ListItem>
+                                    {...item}
+                                    onProductClick={handleProductClick}
+                                    onQuantityChange={updateQuantity}
+                                    onRemove={removeFromCart}
+                                />
                             ))}
                         </List>
                     )}
