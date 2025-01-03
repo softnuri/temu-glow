@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { Container, Box, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
 import {
     faLaptop,
     faTshirt,
@@ -9,6 +11,8 @@ import {
     faDumbbell,
     faGamepad,
 } from "@fortawesome/free-solid-svg-icons";
+import "swiper/css";
+import "swiper/css/navigation";
 
 const categories = [
     { id: "electronics", name: "전자기기", icon: faLaptop, color: "#9b87f5" },
@@ -40,62 +44,69 @@ const CategoryNav = () => {
             <Container maxWidth="xl">
                 <Box
                     sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        gap: { xs: 3, md: 6 },
                         py: { xs: 2, md: 3 },
                         px: 2,
-                        overflowX: "auto",
-                        msOverflowStyle: "none",
-                        scrollbarWidth: "none",
-                        "&::-webkit-scrollbar": {
-                            display: "none",
-                        },
                     }}
                 >
-                    {categories.map((category) => (
-                        <Link
-                            key={category.id}
-                            to={`/category/${category.id}`}
-                            className="group flex flex-col items-center min-w-[80px] text-decoration-none transition-all duration-300 hover:-translate-y-1"
-                            style={{ color: "inherit", textDecoration: "none" }}
-                        >
-                            <Box
-                                sx={{
-                                    width: { xs: 48, md: 60 },
-                                    height: { xs: 48, md: 60 },
-                                    borderRadius: "16px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    backgroundColor: category.color,
-                                    marginBottom: 1,
-                                    transform: "scale(1)",
-                                    transition: "transform 0.2s ease-in-out",
-                                    "&:hover": {
-                                        transform: "scale(1.05)",
-                                    },
-                                }}
-                            >
-                                <FontAwesomeIcon
-                                    icon={category.icon}
-                                    size="lg"
-                                    style={{ color: "#1A1F2C" }}
-                                />
-                            </Box>
-                            <Typography
-                                variant="body2"
-                                sx={{
-                                    fontWeight: 500,
-                                    textAlign: "center",
-                                    color: "#1A1F2C",
-                                    fontSize: { xs: "0.875rem", md: "1rem" },
-                                }}
-                            >
-                                {category.name}
-                            </Typography>
-                        </Link>
-                    ))}
+                    <Swiper
+                        modules={[Navigation]}
+                        navigation={true}
+                        slidesPerView="auto"
+                        spaceBetween={24}
+                        className="category-swiper"
+                    >
+                        {categories.map((category) => (
+                            <SwiperSlide key={category.id}>
+                                <Link
+                                    to={`/category/${category.id}`}
+                                    className="group flex flex-col items-center min-w-[80px] text-decoration-none transition-all duration-300 hover:-translate-y-1"
+                                    style={{
+                                        color: "inherit",
+                                        textDecoration: "none",
+                                    }}
+                                >
+                                    <Box
+                                        sx={{
+                                            width: { xs: 48, md: 60 },
+                                            height: { xs: 48, md: 60 },
+                                            borderRadius: "16px",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            backgroundColor: category.color,
+                                            marginBottom: 1,
+                                            transform: "scale(1)",
+                                            transition:
+                                                "transform 0.2s ease-in-out",
+                                            "&:hover": {
+                                                transform: "scale(1.05)",
+                                            },
+                                        }}
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={category.icon}
+                                            size="lg"
+                                            style={{ color: "#1A1F2C" }}
+                                        />
+                                    </Box>
+                                    <Typography
+                                        variant="body2"
+                                        sx={{
+                                            fontWeight: 500,
+                                            textAlign: "center",
+                                            color: "#1A1F2C",
+                                            fontSize: {
+                                                xs: "0.875rem",
+                                                md: "1rem",
+                                            },
+                                        }}
+                                    >
+                                        {category.name}
+                                    </Typography>
+                                </Link>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
                 </Box>
             </Container>
         </Box>
