@@ -1,4 +1,4 @@
-import { IconButton } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "@/components/ui/button";
@@ -37,8 +37,12 @@ const CartItem = ({
                         className="w-full h-full object-cover absolute inset-0"
                     />
                 </div>
-                <div className="flex-grow">
-                    <h3 className="text-base font-medium text-gray-900 mb-1 overflow-hidden whitespace-nowrap text-ellipsis">
+                <div className="flex-grow min-w-0">
+                    {" "}
+                    {/* min-w-0 추가 */}
+                    <h3 className="text-base font-medium text-gray-900 mb-1 truncate">
+                        {" "}
+                        {/* truncate 클래스 추가 */}
                         {title}
                     </h3>
                     <p className="text-gray-600">${price.toFixed(2)}</p>
@@ -53,9 +57,16 @@ const CartItem = ({
                         >
                             -
                         </Button>
-                        <span className="min-w-[3ch] text-center font-mono">
+                        <Typography
+                            sx={{
+                                minWidth: "4ch",
+                                textAlign: "center",
+                                fontFamily: "monospace",
+                            }}
+                        >
                             {quantity}
-                        </span>
+                        </Typography>
+
                         <Button
                             size="sm"
                             className="scale-80"
