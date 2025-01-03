@@ -26,10 +26,10 @@ const CartItem = ({
 }: CartItemProps) => {
     return (
         <div
-            className="py-2 cursor-pointer hover:bg-gray-50 transition-colors"
+            className="py-4 cursor-pointer hover:bg-gray-50 transition-colors border border-gray-200 rounded-lg shadow-md mb-4"
             onClick={() => onProductClick(id)}
         >
-            <div className="flex gap-2 w-full">
+            <div className="flex gap-2 w-full px-4">
                 <div className="w-[100px] h-[100px] flex-shrink-0 relative overflow-hidden rounded">
                     <img
                         src={image}
@@ -38,18 +38,14 @@ const CartItem = ({
                     />
                 </div>
                 <div className="flex-grow min-w-0">
-                    {" "}
-                    {/* min-w-0 추가 */}
                     <h3 className="text-base font-medium text-gray-900 mb-1 truncate">
-                        {" "}
-                        {/* truncate 클래스 추가 */}
                         {title}
                     </h3>
                     <p className="text-gray-600">${price.toFixed(2)}</p>
                     <div className="flex items-center gap-2 mt-2">
                         <Button
                             size="sm"
-                            className="scale-80"
+                            className="scale-[0.68]"
                             onClick={(e) => {
                                 e.stopPropagation();
                                 onQuantityChange(id, quantity - 1);
@@ -69,7 +65,7 @@ const CartItem = ({
 
                         <Button
                             size="sm"
-                            className="scale-80"
+                            className="scale-[0.68]"
                             onClick={(e) => {
                                 e.stopPropagation();
                                 onQuantityChange(id, quantity + 1);
@@ -79,7 +75,7 @@ const CartItem = ({
                         </Button>
                     </div>
                 </div>
-                <div className="flex items-start">
+                <div className="flex items-center pr-1">
                     <IconButton
                         edge="end"
                         onClick={(e) => {
