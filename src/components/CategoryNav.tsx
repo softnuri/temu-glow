@@ -15,14 +15,13 @@ const categories = [
 
 const CategoryNav = () => {
     return (
-        <div className="bg-white shadow-sm mb-6">
+        <div className="bg-white shadow-sm mb-6 sticky top-[120px] md:top-[64px] z-10">
             <div className="container mx-auto px-4">
                 <Swiper
                     modules={[Navigation]}
                     spaceBetween={10}
                     slidesPerView="auto"
                     navigation
-                    // centeredSlides={true}
                     className="py-4"
                 >
                     {categories.map((category) => (
