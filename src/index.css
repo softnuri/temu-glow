@@ -118,3 +118,20 @@
         @apply bg-background text-foreground;
     }
 }
+
+/* Swiper 커스텀 스타일 */
+.category-swiper {
+    width: 100%;
+    height: 100%;
+    position: static !important;
+}
+
+.category-swiper .swiper-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.category-swiper .swiper-slide {
+    width: auto;
+    height: auto;
+}
